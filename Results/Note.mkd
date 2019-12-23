@@ -1,0 +1,1 @@
+Results of index calculation will be presented in this folder.
