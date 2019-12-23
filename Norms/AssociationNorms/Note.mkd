@@ -1,0 +1,1 @@
+Place strength.SWOW-EN.R123.csv in this folder!
