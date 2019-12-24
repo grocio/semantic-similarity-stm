@@ -53,8 +53,22 @@ all_words_count = len(all_words)
 print('all_words count:', all_words_count)
 
 print('Available words in Affective norms')
-avl_affect = sum([1 for w in all_words if w in list(affect_df['Word'])])
+avl_affect = 0
+for w in all_words:
+    if w in list(affect_df['Word']):
+        avl_affect += 1
+    else:
+        print(w)
+
+print('available:{}, all:{}'.format(avl_affect, all_words_count))
 print('Coverage:', avl_affect / all_words_count)
+
 print('Available words in Association norms')
-avl_associ = sum([1 for w in all_words if w in list(associ_df.columns)])
+avl_associ = 0
+for w in all_words:
+    if w in list(associ_df['Unnamed: 0']):
+        avl_associ += 1
+    else:
+        print(w)
+print('available:{}, all:{}'.format(avl_associ, all_words_count))
 print('Coverage:', avl_associ / all_words_count)
