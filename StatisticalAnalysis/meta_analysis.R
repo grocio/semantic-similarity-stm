@@ -45,6 +45,7 @@ meta_regression_gro <- function(path, forest_out, funnel_out, results_out){
                           layout = "JAMA",
                           text.predict = "95% PI",
                           col.predict = "black",
+                          xlab = "Standardized Mean Difference (95% CI)",
                           colgap.forest.left = unit(15,"mm"))
     dev.off() 
     
