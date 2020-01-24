@@ -13,7 +13,7 @@ Downloda 13428_2012_314_MOESM1_ESM.zip and place a file, BRM-emot-submit.csv in 
 Download SWOW-EN2008 assoc. strengths (R123) [8Mb] and place a file, strength.SWOW-EN.R123.csv in AssociationNorms folder.
 
 [French affective norms](https://link.springer.com/article/10.3758/s13428-013-0431-1)
-Download ESM 2 (XLSX 284 kb) and place 13428_2013_431_MOESM2_ESM,xlsx in AffectiveNormsFrench folder.
+Download ESM 2 (XLSX 284 kb) and place 13428_2013_431_MOESM2_ESM.xlsx in AffectiveNormsFrench folder.
 
 **Materials in previous studies**
 Please contact the aurthor (ishiguro.sho.gmail.com). I will not distribute files of materials for copyright protection. Alternatively, manually fetch words from articles and create xlsx files.
