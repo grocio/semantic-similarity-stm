@@ -4,7 +4,13 @@ library(dmetar)
 library(grid)
 
 meta_regression_gro <- function(path, forest_out, funnel_out, results_out){
+
   df <- read.csv(path)
+  x <- df$Dsim - df$Sim
+  y <- df$Aso - df$Unaso
+
+  print('For all studies, correlation between SMS and CD')
+  print(cor(x,y))
 
   df <- df[order(df$Study),]
 
