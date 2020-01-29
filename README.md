@@ -3,7 +3,7 @@
 ## Workflow
 
 ### OPTIONAL Modify Summary Table of previous studies
-In case you want to include/exclude studies. It shoukld contains effect sizes and file paths for the materials.
+In case you want to include/exclude studies. It should contains effect sizes and file paths for the materials.
 
 ### Prepare for Materials and Norms
 [English affective norms](https://link.springer.com/article/10.3758/s13428-012-0314-x)
