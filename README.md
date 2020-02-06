@@ -46,5 +46,5 @@ python preprocess_forR.py
 
 ### Analyse data
 ```
-Rscripts meta_analysis.R
+Rscript meta_analysis.R
 ```
