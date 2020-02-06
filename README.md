@@ -16,7 +16,7 @@ Download SWOW-EN2008 assoc. strengths (R123) [8Mb] and place a file, strength.SW
 Download ESM 2 (XLSX 284 kb) and place 13428_2013_431_MOESM2_ESM.xlsx in AffectiveNormsFrench folder.
 
 **Materials in previous studies**
-Please contact the aurthor (ishiguro.sho.gmail.com). I will not distribute files of materials for copyright protection. Alternatively, manually fetch words from articles and create xlsx files.
+Please contact the aurthor (ishiguro.sho.grocio@gmail.com). I will not distribute files of materials for copyright protection. Alternatively, manually fetch words from articles and create xlsx files.
 
 ### Do data Cleansing
 Remove " and ' in strength.SWOW-EN.R123.csv (the original file)
