@@ -8,6 +8,8 @@ associ_df = pd.read_csv(ASSOCIATION_NROMS_PATH)
 print(associ_df.head())
 
 
+strength_df = pd.read_csv('../Norms/AssociationNorms/cleansedStrength.csv', sep='\t')
+
 df = pd.read_excel('../SummaryTable/SummaryTable.xlsx', sheet_name = 'AllMaterials')
 material_list = df['MaterialFile']
 
@@ -52,23 +54,31 @@ all_words = list(set(all_words))
 all_words_count = len(all_words)
 print('all_words count:', all_words_count)
 
-print('Available words in Affective norms')
+print('Not Available words in Affective norms')
 avl_affect = 0
+out_affect_words = []
+
 for w in all_words:
     if w in list(affect_df['Word']):
         avl_affect += 1
     else:
-        print(w)
+        out_affect_words.append(w)
+
+for i, word in enumerate(out_affect_words, 1):
+    print('{:03} {}'.format(i, word))
 
 print('available:{}, all:{}'.format(avl_affect, all_words_count))
 print('Coverage:', avl_affect / all_words_count)
 
-print('Available words in Association norms')
+print('Not Available words in Association norms')
 avl_associ = 0
+out_asso_words = []
 for w in all_words:
-    if w in list(associ_df['Unnamed: 0']):
+    if (w in list(strength_df['cue'])) or (w in list(strength_df['response'])):
         avl_associ += 1
     else:
-        print(w)
+        out_asso_words.append(w)
 print('available:{}, all:{}'.format(avl_associ, all_words_count))
 print('Coverage:', avl_associ / all_words_count)
+for i, word in enumerate(out_asso_words, 1):
+    print('{:03} {}'.format(i, word))
