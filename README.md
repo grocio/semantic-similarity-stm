@@ -57,7 +57,7 @@ python table_construction.py
 ```
 
 ## Note
-In the manuscript, I used examples of words lits to explain similarity and connectivity indexes. I made functions that calculate (dis)similarity or connectivity indexes for a list. Note that you should run `free_association_matrix_creator.py` and get a cue-response matrix containing words that you target before using `connectivity_calc` function.
+Below, `mean_dist_from_centroid` calculated (dis)similarity value for an example list (i.e., 'diamond, ... ,sapphire') and `connectivity_calc` calculated connectivity (or association stregnth) for another example list (i.e., 'apple, banana, orange'). These examples are used in my manuscript. Note that you should run `free_association_matrix_creator.py` and get a cue-response matrix containing words that you target before using `connectivity_calc` function.
 
 I hope that these functions facilitate psychological studies!
 ```
