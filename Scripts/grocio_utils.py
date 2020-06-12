@@ -1,5 +1,4 @@
 import sys
-
 sys.path.append('../../Manuscript/')
 
 import random as rnd
@@ -12,14 +11,54 @@ import itertools
 from tqdm import tqdm
 import csv
 from datetime import datetime
+import gensim.downloader as api
 
 # SETTING
 AFFECT_NORMS_PATH = '../Norms/AffectiveNorms/BRM-emot-submit.csv'
-ASSOCIATION_NROMS_PATH = '../Norms/AssociationNorms/association_matrix.csv' #Preprocessed data
+ASSOCIATION_NROMS_PATH = '../Norms/AssociationNorms/association_matrix.csv'
 MATERIAL_PATH = '../Materials/'
-ITERATION_N = 10000 # 10000
+ITERATION_N = 10000 # For random list creation
+TRAINED_DATA = "word2vec-google-news-300" #word2vec model
 
 affect_df = pd.read_csv(AFFECT_NORMS_PATH)
+print('LOADED affect norms')
+
+
+word_vectors = api.load(TRAINED_DATA)
+print('LOADED word2vec vectors')
+
+association_df = pd.read_csv(ASSOCIATION_NROMS_PATH, index_col=0)
+print('LOADED association norms')
+
+cues_in_norms = set(association_df.index)
+
+def cos_sim(v1, v2):
+    """
+    Calculate cosine similarity.
+    If vector's length == 0, it returns np.nan.
+    """
+    if (len(v1) == 0) or (len(v2) == 0):
+        return np.nan
+    else:
+        return np.dot(v1, v2) / (np.linalg.norm(v1) * np.linalg.norm(v2))
+
+def word2vec_sim_cal(word_li):
+    """
+    Return mean cosine similarity for a list of several words.
+    """
+    result = []
+    list_length = len(word_li)
+
+    for i in range(list_length):
+        for j in range(list_length):
+            if i < j:
+                if word_li[i] in word_vectors and word_li[j] in word_vectors:
+                    result.append(word_vectors.similarity(word_li[i], word_li[j]))
+
+    if result != []:
+        return np.nanmean(result)
+    else:
+        return np.nan
 
 def words2affect_df(word_li):
     """
@@ -40,9 +79,9 @@ def affective_centroid(a_df):
     length = len(a_df['Word'])
 
     # N should be greater than or equal to 2
+    # Otherwise the centroid == 0 or one word's point
     if length < 2:
         return np.nan
-
     else:
         centroid = (np.nanmean(a_df['V.Mean.Sum']),
                     np.nanmean(a_df['A.Mean.Sum']),
@@ -50,27 +89,33 @@ def affective_centroid(a_df):
 
         return centroid
 
-def dists_from_centroid(word_li, dist_func=distance.euclidean):
+def mean_dist_from_centroid(word_li, dist_func=distance.euclidean):
     """
-    Return a list of distances between each words and the centroid.
+    Return mean disttance from centroid for a list.
     It takes a list of words. By default, it uses euclidean distance calculation.
     Use dist_func option for another distance. For example, dist_func = distance.cityblock works.
     """
     current_df = words2affect_df(word_li)
     centroid = affective_centroid(current_df)
 
-    # Centroid cannot be canculated
+    # Centroid cannot be canculated when a list's length < 2
     if len(current_df['Word']) < 2:
-        return [np.nan]
-
+        return np.nan
     else:
         dist_li = []
         for i in range(len(current_df['Word'])):
             three_dim_val = tuple(current_df.iloc[i, j] for j in range(1,4))
             dist_li.append(dist_func(centroid, three_dim_val))
-        return dist_li
+        return np.nanmean(dist_li)
 
-def materials2lists(f_name, row_len_set=None):
+def connectivity_calc(word_li):
+    """
+    Return mean associative strength for a list (i.e., connectivity).
+    """
+    word_candidate = set(word_li).intersection(cues_in_norms)
+    return np.nanmean(association_df.loc[word_candidate, word_candidate].to_numpy())
+
+def materials2lists(f_name, row_len_set):
     """
     Takes an xlsx file (path) and returns similar and disimilar lists.
 
@@ -79,9 +124,9 @@ def materials2lists(f_name, row_len_set=None):
     Set row_len_set = 6 in that situation.
 
     Two kinds of xlsx files are assumed.
-    1) Book with similar sheet & dissimilar sheet
+    a) Book with similar sheet & dissimilar sheet
         corresponding fixed similar lists vs. fixed dissimilar lists
-    2) Book with group sheet
+    b) Book with group sheet
         corresponding categorically and/or associatively grouped lists vs. randomized lists
     """
     iter_n = ITERATION_N
@@ -99,10 +144,9 @@ def materials2lists(f_name, row_len_set=None):
             all_row_len = selected_sheet.nrows
             all_col_len = selected_sheet.ncols
 
+            # When all_row_len == row_len_set
+            # e.g., 8 rows in materials and 8 words in a list in the experiment
             if all_row_len == row_len_set:
-                row_len_set = None
-
-            if row_len_set == None:
                 for col_n in range(all_col_len):
                     one_col = []
                     for row_n in range(all_row_len):
@@ -132,11 +176,8 @@ def materials2lists(f_name, row_len_set=None):
         all_row_len = selected_sheet.nrows
         all_col_len = selected_sheet.ncols
 
-        if all_row_len == row_len_set:
-            row_len_set = None
-
         # For similar lists, the procedure is the same as in the above
-        if row_len_set == None:
+        if all_row_len == row_len_set:
             for col_n in range(all_col_len):
                 one_col = []
                 for row_n in range(all_row_len):
@@ -151,24 +192,28 @@ def materials2lists(f_name, row_len_set=None):
                     sim_mld_li.append(one_col)
 
         # Creating dissimilar list based on grouped lists
-        # It takes some time. Thus, it shows a progress bar
-        if row_len_set == None:
-            for run_n in tqdm(range(iter_n), desc = 'Randomized Lists Creation: {}'.format(f_name)):
+        # It takes some time. So, it shows a progress bar
+        if all_row_len == row_len_set:
+            for run_n in tqdm(range(iter_n), desc = 'Randomized Lists Creation: {}'.format(f_name), position=1):
                 one_col = []
 
                 # N different groups are selected without replacement
+                # N = all_row_len
                 col_ns = rnd.sample(range(all_col_len), all_row_len)
+
+                # N rows are slected
                 # As different groups are selected with replacement, repetition of the same row number is OK
                 row_ns = rnd.choices(range(all_row_len), k=all_row_len)
 
                 for i in range(all_row_len):
                     one_col.append(selected_sheet.cell_value(row_ns[i],col_ns[i]))
                 dsim_mld_li.append(one_col)
-
         else:
-            for run_n in tqdm(range(iter_n), desc = 'Randomized Lists Creation: {}'.format(f_name)):
+            for run_n in tqdm(range(iter_n), desc = 'Randomized Lists Creation: {}'.format(f_name), position=1):
                 one_col = []
 
+                # all_row len != row_len_set
+                # N = row_len_set
                 col_ns = rnd.sample(range(all_col_len), row_len_set) # all_row_len in the above block
                 row_ns = rnd.choices(range(all_row_len), k=row_len_set)
 
@@ -177,234 +222,81 @@ def materials2lists(f_name, row_len_set=None):
                 dsim_mld_li.append(one_col)
 
     else:
-        print('WARNING\n{} does not have similar/dissimilar or group sheet'.format(f_name))
+        print('WARNING\n{} does not have similar/dissimilar or group sheets'.format(f_name))
 
     return sim_mld_li, dsim_mld_li
 
-
-def intersection_li_cueres(exp_li, df_col_names):
-    """
-    It returns a nested list of lists of intersections of two lists.
-    For calculation of connectivity (cue-response associative strength),
-    Simply, dropping items of a list that are missing in the cue-response matrix
-    """
-    intersection_li  = []
-
-    for li in exp_li:
-        intersect_li = [item for item in li if item in df_col_names]
-        intersection_li.append(intersect_li)
-
-    return intersection_li
-
-def connectivity4fixed_lists(cueres_df, file_name_path, sheet_name):
-    """
-    Calculate mean associative strength for a similar or dissimilar sheet.
-    For grouped sheets, use connectivity4grouped_lists.
-    """
-    print('Connectivity Calculation {}: {}'.format(sheet_name, file_name_path))
-
-    associ_columns = cueres_df.columns
-
-    book = xlrd.open_workbook(file_name_path)
-    selected_sheet = book.sheet_by_name(sheet_name)
-
-    all_row_len = selected_sheet.nrows
-    all_col_len = selected_sheet.ncols
-
-    mean_by_lists = []
-
-    for col_n in range(all_col_len):
-        one_col = []
-        for row_n in range(all_row_len):
-            one_col.append(selected_sheet.cell_value(row_n,col_n))
-
-        current_cols = set(one_col) & set(associ_columns)
-        current_cols = list(current_cols)
-        current_df = cueres_df.loc[current_cols, current_cols]
-
-        # print(file_name_path, current_df)
-        length = len(current_df)
-
-        if length > 1:
-            diag_elems = [current_df.iloc[i, i] for i in range(length)]
-            diag_sum = np.nansum(diag_elems)
-            all_sum = sum(current_df.sum())
-            mean_by_one_list = (all_sum - diag_sum) / (length * length - length)
-        else:
-            mean_by_one_list = np.nan
-
-        mean_by_lists.append(mean_by_one_list)
-
-    # print('mean by lists:', np.nanmean(mean_by_lists))
-    return np.nanmean(mean_by_lists)
-
-def connectivity4grouped_lists(cueres_df, multi_li):
-    """
-    Calculate mean associative strength of a given list.
-    It takes cue-response probability matrix (DataFrame) and nested list of lists of words.
-    Nested list is a list of lists of grouped words NOT randomized list.
-    """
-
-    df_col_names = cueres_df.columns
-    # When df contains the all words of multi_li, intercections_li_cueres is redundant.
-    inter_multi = intersection_li_cueres(multi_li, df_col_names)
-    # print(inter_multi)
-    flatten_words = sum(inter_multi, [])
-
-    grouped_strengths = []
-    grouped_simple_sums = []
-    grouped_li_lengths = []
-
-    for li in tqdm(inter_multi, 'Connectivity Calculation by Groups'):
-        # Create DataFrame that contains words of li
-        current_df = cueres_df.loc[li, li]
-        length = len(current_df)
-
-        # Note. Diagonal elements should be dropped: e.g., a pair of Cue - Response, Banana - Banana, is innapropriate.
-        # Sum of diagonal elements are calculated, which is used to subtrast from the sum
-        diag_elems = [current_df.iloc[j, j] for j in range(length)]
-        diag_sum = np.nansum(diag_elems)
-
-        if length > 1:
-            grouped_li_lengths.append(length)
-            grouped_simple_sums.append(sum(current_df.sum()))
-
-            #print('diag sum:', diag_sum)
-            #print('all sum:', sum(current_df.sum()))
-
-            grouped_strengths.append((sum(current_df.sum()) - diag_sum) / (length * length - length)) # Append a scalar to the list
-
-        elif length == 1:
-            grouped_li_lengths.append(length)
-            grouped_simple_sums.append(current_df.iloc[0,0])
-
-    # Ungrouped_strength = mean(All strengths - each strength of grouped list)
-    all_df = cueres_df.loc[flatten_words, flatten_words]
-    all_length = len(all_df)
-
-    if all_length**2 - sum([i**2 for i in grouped_li_lengths]) == 0: # When a matrix contains only cells for grouped words
-        print('Warning: all_length is {}, grouped_li_lengths is {}\nThis is quite unlikely\nInspect data\n'.format(all_length, grouped_li_lengths))
-        pprint(all_df)
-        ungrouped_strength = np.nan
-    else:
-        ungrouped_strength = (sum(all_df.sum()) - sum(grouped_simple_sums)) / \
-            (all_length**2 - sum([i**2 for i in grouped_li_lengths]) )
-
-    return np.nanmean(grouped_strengths), ungrouped_strength
-
-def materials4groupedlist(f_name):
-    """
-    It transforms a sheet to a simple multidimensional list for calculating connectivity
-    For calculatiing connectivity, randomized lists are not necessary
-    """
-    book = xlrd.open_workbook(f_name)
-    sheet_names = book.sheet_names()
-
-    multi_li = []
-
-    if 'group' in sheet_names:
-        selected_sheet = book.sheet_by_name('group')
-
-        all_row_len = selected_sheet.nrows
-        all_col_len = selected_sheet.ncols
-
-        multi_li = []
-
-        for col_n in range(all_col_len):
-            one_col = []
-            for row_n in range(all_row_len):
-                one_col.append(selected_sheet.cell_value(row_n,col_n))
-            multi_li.append(one_col)
-
-    else:
-        print('WARNING\n{} does not have a group sheet'.format(f_name))
-
-    return multi_li
-
-def similarity_connectivity_calc(excel_book, sheet_name, material_path = MATERIAL_PATH, name_option=None):
+def similarity_connectivity_calc(summary_book, sheet_name, material_path = MATERIAL_PATH, name_option=None):
     """
     It takes a summary table of experiments,
     calculating similarity and connectivity for each experiment.
     """
 
-    df = pd.read_excel(excel_book, sheet_name = sheet_name)
+    summary_df = pd.read_excel(summary_book, sheet_name = sheet_name)
 
-    material_list = df['MaterialFile']
-    length_list = df['ListLength']
+    material_list = summary_df['MaterialFile']
+    length_list = summary_df['ListLength']
 
     material_length_pairs = [(material_list[i], length_list[i]) for i in range(len(material_list))]
 
     # Similarity
-    for i in range(len(material_list)):
+    for i in tqdm(range(len(material_list)), desc ='Study', position=0):
+        # First check materila_length_pairs
+        # If a pair of material X and length Y has been calculated, calculation will be skipped
         if not material_length_pairs[i] in material_length_pairs[:i]:
             current_material_file = material_path + material_list[i]
             sim_mld, dsim_mld = materials2lists(f_name = current_material_file,
                                                 row_len_set = length_list[i])
-            sim_mean_dists = []
-            dsim_mean_dists = []
+            sim_mean_li = []
+            dsim_mean_li = []
 
-            for one_sim_li in tqdm(sim_mld, desc = 'Similarity Calculation Sim: {}'.format(current_material_file)):
-                word_affect_df = words2affect_df(one_sim_li)
-                if len(word_affect_df['Word']) > 1:
-                    sim_mean_dists.append(np.nanmean(dists_from_centroid(one_sim_li)))
+            sim_w2v_li = []
+            dsim_w2v_li = []
 
-            for one_dsim_li in tqdm(dsim_mld, desc = 'Similarity Calculation Dsim: {}'.format(current_material_file)):
-                word_affect_df = words2affect_df(one_dsim_li)
-                if len(word_affect_df['Word']) > 1:
-                    dsim_mean_dists.append(np.nanmean(dists_from_centroid(one_dsim_li)))
+            sim_connec_li = []
+            dsim_connec_li = []
 
-            sim_mean_mean = np.nanmean(sim_mean_dists)
-            dsim_mean_mean = np.nanmean(dsim_mean_dists)
+            for one_sim_li in tqdm(sim_mld, desc = 'Calculation for sim lists: {}'.format(current_material_file), position=1):
+                # Similarity
+                sim_mean_li.append(mean_dist_from_centroid(one_sim_li))
+                # word2vec similarity
+                sim_w2v_li.append(word2vec_sim_cal(one_sim_li))
+                # connectivity
+                sim_connec_li.append(connectivity_calc(one_sim_li))
 
-            # CHECK_UP
-            # print( material_list[i], sim_mean_dists, sim_mean_mean)
-            # print( material_list[i], dsim_mean_dists, dsim_mean_mean)
+            for one_dsim_li in tqdm(dsim_mld, desc = 'Calculation for dsim lists: {}'.format(current_material_file), position=1):
+                # Similarity
+                dsim_mean_li.append(mean_dist_from_centroid(one_dsim_li))
+                # word2vec similarity
+                dsim_w2v_li.append(word2vec_sim_cal(one_dsim_li))
+                # connectivity
+                dsim_connec_li.append(connectivity_calc(one_dsim_li))
 
-            df.loc[i,'Sim'] = sim_mean_mean
-            df.loc[i,'Dsim'] = dsim_mean_mean
+            summary_df.loc[i,'Sim'] = np.nanmean(sim_mean_li)
+            summary_df.loc[i,'Dsim'] = np.nanmean(dsim_mean_li)
+
+            summary_df.loc[i, 'W2VSim'] = np.nanmean(sim_w2v_li)
+            summary_df.loc[i, 'W2VDsim'] = np.nanmean(dsim_w2v_li)
+
+            summary_df.loc[i, 'CONSim'] = np.nanmean(sim_connec_li)
+            summary_df.loc[i, 'CONDsim'] = np.nanmean(dsim_connec_li)
+
 
         else: # calculation for the material & length pair has been done
             print('Skipped {}'.format(material_list[i]))
             where_pair = material_length_pairs.index(material_length_pairs[i])
 
-            df.loc[i,'Sim'] = df.loc[where_pair, 'Sim']
-            df.loc[i,'Dsim'] = df.loc[where_pair, 'Dsim']
+            summary_df.loc[i,'Sim'] = summary_df.loc[where_pair, 'Sim']
+            summary_df.loc[i,'Dsim'] = summary_df.loc[where_pair, 'Dsim']
 
-    print('Similarity Done')
+            summary_df.loc[i,'W2VSim'] = summary_df.loc[where_pair, 'W2VSim']
+            summary_df.loc[i,'W2VDsim'] = summary_df.loc[where_pair, 'W2VDsim']
 
-    # Connectivity, which is based on material, ignoring length
-    association_df = pd.read_csv(ASSOCIATION_NROMS_PATH, index_col=0)
-
-    material_list = list(material_list)
-
-    for i in range(len(material_list)):
-        if not material_list[i] in material_list[:i]:
-            file_name_path = MATERIAL_PATH + material_list[i]
-            book = xlrd.open_workbook(file_name_path)
-            sheet_names = book.sheet_names()
-
-            if 'group' in sheet_names:
-                material_multili = materials4groupedlist(file_name_path)
-                aso, unaso = connectivity4grouped_lists(association_df, material_multili)
-            elif 'similar' in sheet_names and 'dissimilar' in sheet_names:
-                aso = connectivity4fixed_lists(association_df, file_name_path, 'similar')
-                unaso = connectivity4fixed_lists(association_df, file_name_path, 'dissimilar')
-
-            df.loc[i, 'Aso'] = aso
-            df.loc[i, 'Unaso'] = unaso
-
-        else: # calculation for the material & length pair has been done
-            print('Skipped {}'.format(material_list[i]))
-            where_material = material_list.index(material_list[i])
-
-            df.loc[i,'Aso'] = df.loc[where_material, 'Aso']
-            df.loc[i,'Unaso'] = df.loc[where_material, 'Unaso']
-
-    print('Connectivity Done')
+            summary_df.loc[i, 'CONSim'] = summary_df.loc[where_pair, 'CONSim']
+            summary_df.loc[i, 'CONDsim'] = summary_df.loc[where_pair, 'CONDsim']
 
     # Process AdditionalKey
-
     if name_option != None:
-        df.to_csv('../Results/results_{}_{}.csv'.format(sheet_name, name_option))
+        summary_df.to_csv('../Results/results_{}_{}.csv'.format(sheet_name, name_option))
     else:
-        df.to_csv('../Results/results_{}.csv'.format(sheet_name))
+        summary_df.to_csv('../Results/results_{}.csv'.format(sheet_name))
