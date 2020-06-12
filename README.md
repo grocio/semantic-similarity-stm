@@ -53,3 +53,15 @@ Rscript meta_analysis.R
 ```
 python table_construction.py
 ```
+
+## Note
+In the manuscript, I used examples of words lits to explain similarity and connectivity indexes.
+I made functions that calculate (dis)similarity or connectivity indexes for a list.
+Hope that these functions facilitate psychological studies!
+```
+>>> from grocio_utils import *
+>>> mean_dist_from_centroid(['diamond', 'emerald', 'opal','pearl','ruby','sapphire'])
+1.0449535299761725
+>>> connectivity_calc(['apple','banana','orange'])
+0.03786311822026108
+```
