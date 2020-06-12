@@ -19,8 +19,7 @@ def li_to_fig(li, f_name):
 
     print(df)
     print('Centroid:', affective_centroid(df))
-    print('Distance From Centroid:', dists_from_centroid(li))
-    print('Mean Distance:', np.mean(dists_from_centroid(li)))
+    print('Mean Distance:', mean_dist_from_centroid(li))
 
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')

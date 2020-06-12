@@ -4,10 +4,12 @@ from scipy.spatial import distance
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib.lines import Line2D
+from matplotlib.patches import Patch
 import seaborn as sns
 from mpl_toolkits.mplot3d import Axes3D
 
-# the word, long is missing in the affective norms!
+# the word, 'long' is missing in the affective norms!
 
 AFFECT_NORMS_PATH = '../Norms/AffectiveNorms/BRM-emot-submit.csv'
 
@@ -18,23 +20,16 @@ B10_sim, B10_dis = materials2lists(f_name='../Materials/Baddeley_1966b_Exp1.xlsx
 
 affect_df = pd.read_csv(AFFECT_NORMS_PATH, index_col=0)
 
-"""
-print(B5_sim[0], words2affect_df(B5_sim[0]))
-print(B5_dis[0], words2affect_df(B5_dis[0]))
-print(B10_sim[0], words2affect_df(B10_sim[0]))
-print(B10_dis[0], words2affect_df(B10_dis[0]))
-"""
-
 B5_with_mean_distance_sim = []
 for li in B5_sim:
-    li_distance_item = (np.mean(dists_from_centroid(li)), li)
+    li_distance_item = (mean_dist_from_centroid(li), li)
     B5_with_mean_distance_sim.append(li_distance_item)
 
 B5_with_mean_distance_sim = sorted(B5_with_mean_distance_sim, key = lambda li:li[0])
 
 B5_with_mean_distance_dis = []
 for li in B5_dis:
-    li_distance_item = (np.mean(dists_from_centroid(li)), li)
+    li_distance_item = (mean_dist_from_centroid(li), li)
     B5_with_mean_distance_dis.append(li_distance_item)
 
 B5_with_mean_distance_dis = sorted(B5_with_mean_distance_dis, key = lambda li:li[0])
@@ -54,11 +49,11 @@ print('Mean:', np.mean(B5_dis_vals), '\n', 'sd:', np.std(B5_dis_vals))
 print('B5 lens:', len(B5_sim_vals), len(B5_dis_vals))
 
 print('B10 Sim Mean')
-B10_sim_m = np.mean(dists_from_centroid(B10_sim[0]))
+B10_sim_m = mean_dist_from_centroid(B10_sim[0])
 print(B10_sim_m, B10_sim[0])
 
 print('B10 Dis Mean')
-B10_dis_m = np.mean(dists_from_centroid(B10_dis[0]))
+B10_dis_m = mean_dist_from_centroid(B10_dis[0])
 print(B10_dis_m, B10_dis[0])
 
 sns.set()
