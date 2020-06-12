@@ -5,6 +5,6 @@ Study,SMS,SMSw2v,CD,Direction,Statistics,Design,N,Set
 "Crowder (1979, 3)",0.46,0.24,0.013,-1,n.s.,Within,40,Open
 "Crowder (1979, 4)",0.46,0.24,0.013,-1,"F(1, 19) = 3.04, p < .05",Within,20,Open
 "Nelson et al. (1977, 2&3)",-0.02,0.22,0.008,1,not reported,Between,96,Open
-"Saint-Aubin & Poirier (1999, 3)",0.35,0.30,0.009,1,n.s.,Within,24,Open
-"Saint-Aubin & Poirier (1999, 4, both conditions)",0.35,0.30,0.009,-1,n.s.,Within,56,Closed
-"Saint-Aubin & Poirier (1999, 4, first condition)",0.35,0.30,0.009,-1,n.s.,Between,56,Closed
+"Saint-Aubin & Poirier (1999a, 3)",0.35,0.30,0.009,1,n.s.,Within,24,Open
+"Saint-Aubin & Poirier (1999a, 4, both conditions)",0.35,0.30,0.009,-1,n.s.,Within,56,Closed
+"Saint-Aubin & Poirier (1999a, 4, first condition)",0.35,0.30,0.009,-1,n.s.,Between,56,Closed
