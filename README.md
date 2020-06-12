@@ -67,3 +67,8 @@ I hope that these functions facilitate psychological studies!
 >>> connectivity_calc(['apple','banana','orange'])
 0.03786311822026108
 ```
+
+## Dependencies
+Python libraries: scipy, pandas, numpy, matplotlib, seaborn, xlrd, gensim, tqdm
+
+R libraries: meta, metafor, dmetar, grid
