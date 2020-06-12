@@ -48,3 +48,8 @@ python preprocess_forR.py
 ```
 Rscript meta_analysis.R
 ```
+
+### Create tables of results with Similarity and Connectivity indexes (optional)
+```
+python table_construction.py
+```
