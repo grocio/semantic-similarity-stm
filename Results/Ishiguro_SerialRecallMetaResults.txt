@@ -1,0 +1,151 @@
+             Intercept ConfidenceInterval     t       p
+Egger's test     3.434        -2.642-9.51 1.117 0.28606
+                                    SMD            95%-CI %W(random)
+Crowder (1979, 5)                0.0322 [-0.0659; 0.1302]        7.2
+Guérard & Saint-Aubin (2012, 3)  1.6571 [ 1.4245; 1.8896]        6.9
+Hadley (2006, 4)                 0.8112 [ 0.7570; 0.8655]        7.3
+Poirier & Saint-Aubin (1995, 1)  1.3869 [ 1.2267; 1.5471]        7.1
+Poirier & Saint-Aubin (1995, 2)  1.4486 [ 1.1976; 1.6996]        6.8
+Poirier & Saint-Aubin (1995, 3)  1.0647 [ 0.8728; 1.2567]        7.0
+Saint-Aubin & Poirier (1999a, 1) 1.2437 [ 1.0988; 1.3885]        7.1
+Saint-Aubin & Poirier (1999a, 2) 0.3822 [ 0.2946; 0.4699]        7.2
+Tse (2009, Mixed-associative)    1.3759 [ 1.1851; 1.5666]        7.0
+Tse (2009, Mixed-categorical)    0.4658 [ 0.3571; 0.5744]        7.2
+Tse (2009, Pure-associative)     1.0923 [ 0.9671; 1.2175]        7.2
+Tse (2009, Pure-categorical)     0.3699 [ 0.2862; 0.4537]        7.2
+Tse et al. (2011, Associative)   0.7667 [ 0.7500; 0.7834]        7.3
+Tse et al. (2011, Categorical)   0.5432 [ 0.5284; 0.5580]        7.3
+
+Number of studies combined: k = 14
+
+                        SMD            95%-CI    t  p-value
+Random effects model 0.8954 [ 0.6113; 1.1794] 6.81 < 0.0001
+Prediction interval         [-0.2021; 1.9928]              
+
+Quantifying heterogeneity:
+tau^2 = 0.2364; H = 8.96 [8.06; 9.95]; I^2 = 98.8% [98.5%; 99.0%]
+
+Test of heterogeneity:
+       Q d.f.  p-value
+ 1042.67   13 < 0.0001
+
+Details on meta-analytical method:
+- Inverse variance method
+- Sidik-Jonkman estimator for tau^2
+- Hartung-Knapp adjustment for random effects model
+[1] "@@@ SMS with our proposed index @@@"
+
+Mixed-Effects Model (k = 14; tau^2 estimator: ML)
+
+tau^2 (estimated amount of residual heterogeneity):     0.1439 (SE = 0.0564)
+tau (square root of estimated tau^2 value):             0.3794
+I^2 (residual heterogeneity / unaccounted variability): 99.56%
+H^2 (unaccounted variability / sampling variability):   229.59
+R^2 (amount of heterogeneity accounted for):            34.00%
+
+Test for Residual Heterogeneity:
+QE(df = 12) = 724.1603, p-val < .0001
+
+Test of Moderators (coefficient 2):
+F(df1 = 1, df2 = 12) = 5.8157, p-val = 0.0328
+
+Model Results:
+
+         estimate      se     tval    pval    ci.lb    ci.ub 
+intrcpt    1.6597  0.3380   4.9108  0.0004   0.9233   2.3960  *** 
+SMS       -2.1877  0.9072  -2.4116  0.0328  -4.1643  -0.2112    * 
+
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+
+Mixed-Effects Model (k = 14; tau^2 estimator: ML)
+
+tau^2 (estimated amount of residual heterogeneity):     0.1018 (SE = 0.0404)
+tau (square root of estimated tau^2 value):             0.3190
+I^2 (residual heterogeneity / unaccounted variability): 98.04%
+H^2 (unaccounted variability / sampling variability):   50.92
+R^2 (amount of heterogeneity accounted for):            53.33%
+
+Test for Residual Heterogeneity:
+QE(df = 11) = 352.1406, p-val < .0001
+
+Test of Moderators (coefficients 2:3):
+F(df1 = 2, df2 = 11) = 5.6462, p-val = 0.0205
+
+Model Results:
+
+         estimate       se     tval    pval    ci.lb    ci.ub 
+intrcpt    1.7120   0.3045   5.6220  0.0002   1.0417   2.3822  *** 
+SMS       -3.3114   0.9860  -3.3583  0.0064  -5.4816  -1.1411   ** 
+CD        22.4504  11.2269   1.9997  0.0708  -2.2600  47.1607    . 
+
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+
+        df     AIC     BIC    AICc  logLik    LRT   pval       QE  tau^2 
+Full     4 16.8631 19.4194 21.3076 -4.4316               352.1406 0.1018 
+Reduced  3 19.2591 21.1763 21.6591 -6.6296 4.3960 0.0360 724.1603 0.1439 
+             R^2 
+Full 
+Reduced 29.2885% 
+
+[1] "@@@ SMS with word2vec index @@@"
+
+Mixed-Effects Model (k = 14; tau^2 estimator: ML)
+
+tau^2 (estimated amount of residual heterogeneity):     0.2139 (SE = 0.0828)
+tau (square root of estimated tau^2 value):             0.4625
+I^2 (residual heterogeneity / unaccounted variability): 99.20%
+H^2 (unaccounted variability / sampling variability):   124.31
+R^2 (amount of heterogeneity accounted for):            1.93%
+
+Test for Residual Heterogeneity:
+QE(df = 12) = 701.9331, p-val < .0001
+
+Test of Moderators (coefficient 2):
+F(df1 = 1, df2 = 12) = 0.2265, p-val = 0.6427
+
+Model Results:
+
+         estimate      se     tval    pval    ci.lb   ci.ub 
+intrcpt    1.4085  1.0881   1.2944  0.2199  -0.9623  3.7793    
+SMS_w2v   -1.7548  3.6869  -0.4760  0.6427  -9.7877  6.2782    
+
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+
+Mixed-Effects Model (k = 14; tau^2 estimator: ML)
+
+tau^2 (estimated amount of residual heterogeneity):     0.2111 (SE = 0.0818)
+tau (square root of estimated tau^2 value):             0.4595
+I^2 (residual heterogeneity / unaccounted variability): 99.08%
+H^2 (unaccounted variability / sampling variability):   109.28
+R^2 (amount of heterogeneity accounted for):            3.19%
+
+Test for Residual Heterogeneity:
+QE(df = 11) = 700.7761, p-val < .0001
+
+Test of Moderators (coefficients 2:3):
+F(df1 = 2, df2 = 11) = 0.1850, p-val = 0.8337
+
+Model Results:
+
+         estimate       se     tval    pval     ci.lb    ci.ub 
+intrcpt    2.0055   1.8742   1.0701  0.3075   -2.1196   6.1306    
+SMS_w2v   -3.3997   5.6222  -0.6047  0.5576  -15.7740   8.9746    
+CD        -7.6245  19.1070  -0.3990  0.6975  -49.6787  34.4298    
+
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+
+        df     AIC     BIC    AICc  logLik    LRT   pval       QE  tau^2 
+Full     4 26.3633 28.9195 30.8077 -9.1816               700.7761 0.2111 
+Reduced  3 24.5656 26.4828 26.9656 -9.2828 0.2023 0.6528 701.9331 0.2139 
+            R^2 
+Full 
+Reduced 1.2785% 
+
