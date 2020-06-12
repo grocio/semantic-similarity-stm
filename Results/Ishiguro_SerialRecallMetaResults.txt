@@ -1,3 +1,7 @@
+[1] "SMS & CD correlation"
+[1] 0.5744347
+[1] "SMSw2v & CD correlation"
+[1] -0.7328308
              Intercept ConfidenceInterval     t       p
 Egger's test     3.434        -2.642-9.51 1.117 0.28606
                                     SMD            95%-CI %W(random)
