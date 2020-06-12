@@ -1,0 +1,23 @@
+Study,SMS,SMSw2v,CD,Direction,Statistics,Design,N,Set
+"Belleville et al. (2003, 4)",-0.48,0.24,0.001,1,not reported,Within,4,Closed
+"Biegler (2007, 7, Closed)",0.37,0.26,0.010,-1,not reported,Wihtin,8,Closed
+"Biegler (2007, 7, Open)",0.37,0.26,0.010,1,not reported,within,8,Open
+"Chasse & Belleville (2009, 1)",0.05,0.18,0.002,1,not reported,Within,10,Closed
+"Chasse & Belleville (2009, 2)",-0.38,0.30,0.010,1,not reported,Within,11,Closed
+"Crowder (1979, 1)",0.27,0.30,0.003,unclear,n.s.,Between,24,Open
+"Crowder (1979, 2)",0.65,0.19,0.023,unclear,"F(1, 30) = 1.04, p = .316",Between,32,Open
+"Crowder (1979, 5)",0.45,0.24,0.013,1,"t(19) = -.15, p = .882",Within,20,Open
+"Guérard & Saint-Aubin (2012, 3)",0.33,0.30,0.009,1,"F(1, 19) = 59.60, p < .001",Within,20,Open
+"Hadley (2006, 4)",0.33,0.33,0.008,1,"F(1, 46) = 32.629, p < .001",Within,48,Open
+"Nelson et al. (1977, 4)",-0.02,0.22,0.008,-1,n.s.,Between,64,Open
+"Poirier & Saint-Aubin (1995, 1)",0.11,0.29,0.005,1,"F(1, 23) = 49.37, p < .001",Within,24,Open
+"Poirier & Saint-Aubin (1995, 2)",0.11,0.29,0.005,1,"F(1, 15) = 37.28, p < .001",Within,16,Open
+"Poirier & Saint-Aubin (1995, 3)",0.16,0.31,0.008,1,"F(1, 15) = 20.14, p < .001",Within,16,Open
+"Saint-Aubin & Poirier (1999a, 1)",0.35,0.31,0.011,1,"F(1, 23) = 39.70, p < .001",Within,24,Open
+"Saint-Aubin & Poirier (1999a, 2)",0.35,0.30,0.009,1,"F(1, 23) = 3.75, p = .065",Within,24,Open
+"Tse (2009, Mixed-associative)",0.44,0.24,0.035,1,"t(19) = 6.41, p < .001",Within,20,Open
+"Tse (2009, Mixed-categorical)",0.46,0.33,0.013,1,"t(19) = 2.17, p < .05",Within,20,Open
+"Tse (2009, Pure-associative)",0.44,0.24,0.035,1,"t(24) = 5.64, p < .001",Within,25,Open
+"Tse (2009, Pure-categorical)",0.46,0.33,0.013,1,"t(24) = 1.91, p = .068",Within,25,Open
+"Tse et al. (2011, Associative)",0.44,0.24,0.035,1,"t(151) = 9.50, p < .001",Within,152,Open
+"Tse et al. (2011, Categorical)",0.46,0.33,0.013,1,"t(151) = 6.73, p < .001",Within,152,Open

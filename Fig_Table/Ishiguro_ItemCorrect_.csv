@@ -1,0 +1,15 @@
+Study,SMS,SMSw2v,CD,Direction,Statistics,Design,N,Set
+"Biegler (2007, 7, Closed)",0.38,0.26,0.010,1,not reported,Wihtin,8,Closed
+"Biegler (2007, 7, Open)",0.38,0.26,0.010,1,not reported,within,8,Open
+"Crowder (1979, 1)",0.27,0.30,0.003,1,"F(1,22) = 4.67, p < .05",Between,24,Open
+"Crowder (1979, 2)",0.65,0.19,0.023,1,"F(1,30) = 19.65, p < .001",Between,32,Open
+"Crowder (1979, 5)",0.45,0.24,0.013,1,not reported,Within,20,Open
+"Hadley (2006, 4)",0.34,0.33,0.008,1,"F(1, 46) = 122.567, p < .001",Within,48,Open
+"Nelson et al. (1977, 4)",-0.02,0.22,0.008,-1,n.s.,Between,64,Open
+"Poirier & Saint-Aubin (1995, 1)",0.11,0.29,0.005,1,"F(1, 23) = 82.92, p < .001",Within,24,Open
+"Poirier & Saint-Aubin (1995, 2)",0.11,0.29,0.005,1,"F(1, 15) = 152.92, p < .001",Within,16,Open
+"Poirier & Saint-Aubin (1995, 3)",0.16,0.31,0.008,1,"F(1, 15) = 52.87, p < .001",Within,16,Open
+"Tse (2009, Mixed-associative)",0.44,0.24,0.035,1,not reported,Within,20,Open
+"Tse (2009, Mixed-categorical)",0.46,0.33,0.013,1,not reported,Within,20,Open
+"Tse (2009, Pure-associative)",0.44,0.24,0.035,1,not reported,Within,25,Open
+"Tse (2009, Pure-categorical)",0.46,0.33,0.013,1,not reported,Within,25,Open
