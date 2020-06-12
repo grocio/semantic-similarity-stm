@@ -1,16 +1,15 @@
 import pandas as pd
 import numpy as np
-import pyper
 
 # csvs
 TARGET_FILES = ['results_SerialRecall',
-                'results_SerialReconstruction'] #,
-                # 'results_ItemCorrect',
-                # 'results_OrderError']
+                'results_SerialReconstruction',
+                'results_ItemCorrect',
+                'results_OrderErrors']
 
 def results_integrator(df):
     results_df = df
-    
+
     for IntegKey in set(df['Integration']):
         if not pd.isnull(IntegKey):
             current_df = df[df['Integration'] == IntegKey]
@@ -19,8 +18,12 @@ def results_integrator(df):
 
             mean_Sim = np.sum(weights * current_df['Sim'])
             mean_Dsim = np.sum(weights * current_df['Dsim'])
-            mean_Aso = np.sum(weights * current_df['Aso'])
-            mean_Unaso = np.sum(weights * current_df['Unaso'])
+
+            mean_CONSim = np.sum(weights * current_df['CONSim'])
+            mean_CONDsim = np.sum(weights * current_df['CONDsim'])
+
+            mean_W2V_Sim = np.sum(weights * current_df['W2VSim'])
+            mean_W2V_Dsim = np.sum(weights * current_df['W2VDsim'])
 
             # dzs should be the same across the rows in the current df
             # This is true for directions
@@ -33,12 +36,15 @@ def results_integrator(df):
             integ_study = current_df['Study'].iloc[0]
             integ_statistics = current_df['Statistics'].iloc[0]
             integ_design = current_df['Design'].iloc[0]
+            integ_set = current_df['Set'].iloc[0]
 
             # Since Index of IntegKey does not exist, it append a new row
             results_df.loc[IntegKey, 'Sim'] = mean_Sim
             results_df.loc[IntegKey, 'Dsim'] = mean_Dsim
-            results_df.loc[IntegKey, 'Aso'] = mean_Aso
-            results_df.loc[IntegKey, 'Unaso'] = mean_Unaso
+            results_df.loc[IntegKey, 'CONSim'] = mean_CONSim
+            results_df.loc[IntegKey, 'CONDsim'] = mean_CONDsim
+            results_df.loc[IntegKey, 'W2VSim'] = mean_W2V_Sim
+            results_df.loc[IntegKey, 'W2VDsim'] = mean_W2V_Dsim
 
             results_df.loc[IntegKey, 'Study'] = integ_study
             results_df.loc[IntegKey, 'N'] = integ_N
@@ -49,6 +55,7 @@ def results_integrator(df):
             results_df.loc[IntegKey, 'ListLength'] = integ_list_length
             results_df.loc[IntegKey, 'Statistics'] = integ_statistics
             results_df.loc[IntegKey, 'Design'] = integ_design
+            results_df.loc[IntegKey, 'Set'] = integ_set
 
             results_df.loc[IntegKey, 'Status'] = 'Integrated several results'
 
@@ -56,15 +63,6 @@ def results_integrator(df):
 
 
 if __name__ == '__main__':
-    """
-    XYZ_IntegratedResults.csv file containes single rows of an experiment or
-    integrated results (drops original data of experiments to be integrated)
-
-    XYZ_forRegression.csv file only contains experiments with
-    a) dirrection is reported
-    b) Within subject design
-    """
-
     for f in TARGET_FILES:
         df = pd.read_csv('../Results/{}.csv'.format(f), index_col = 0)
         results_integrator(df)
@@ -74,26 +72,3 @@ if __name__ == '__main__':
         df = df.sort_values('Study')
 
         df.to_csv('./{}_preprocessed.csv'.format(f))
-
-        """
-        direction_checker = []
-        for item in df['Direction']:
-            if str(item) == 'unclear':
-                direction_checker.append(False)
-            else:
-                direction_checker.append(True)
-
-        df = df[direction_checker]
-
-        design_checker = []
-        for i in range(len(df['N'])):
-            item_N = str(df['N'].iloc[i])
-            if item_N.startswith('Between'):
-                design_checker.append(False)
-            else:
-                design_checker.append(True)
-
-        df = df[design_checker]
-
-        df.to_csv('./{}_preprocessed.csv'.format(f))
-        """
