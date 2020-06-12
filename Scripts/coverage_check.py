@@ -2,19 +2,14 @@ from grocio_utils import *
 import pandas as pd
 import xlrd
 from pprint import pprint
+import gensim.downloader as api
 
-print(affect_df.head())
-associ_df = pd.read_csv(ASSOCIATION_NROMS_PATH)
-print(associ_df.head())
-
-
-strength_df = pd.read_csv('../Norms/AssociationNorms/cleansedStrength.csv', sep='\t')
+# affect_df, association_df, word_vectors are loaded in grocio_utils
 
 df = pd.read_excel('../SummaryTable/SummaryTable.xlsx', sheet_name = 'AllMaterials')
 material_list = df['MaterialFile']
 
 all_words = []
-dict_chan = {}
 
 for material_name in material_list:
     current_material_name = '../Materials/' + material_name
@@ -47,14 +42,15 @@ for material_name in material_list:
                 all_words.append(selected_sheet.cell_value(row_n, col_n))
                 # test.append(selected_sheet.cell_value(row_n, col_n))
 
-    # dict_chan[current_material_name] = test
-
 # Unique words
-all_words = list(set(all_words))
+all_words = set(all_words)
 all_words_count = len(all_words)
-print('all_words count:', all_words_count)
 
-print('Not Available words in Affective norms')
+print('all_words count:', all_words_count)
+#print('all words', all_words)
+
+print('@@@ SEMANTIC NORMS @@@')
+print('Not Available words in Semantic norms')
 avl_affect = 0
 out_affect_words = []
 
@@ -70,15 +66,30 @@ for i, word in enumerate(out_affect_words, 1):
 print('available:{}, all:{}'.format(avl_affect, all_words_count))
 print('Coverage:', avl_affect / all_words_count)
 
+print('@@@ ASSOCIATION NORMS @@@')
 print('Not Available words in Association norms')
 avl_associ = 0
 out_asso_words = []
 for w in all_words:
-    if (w in list(strength_df['cue'])) or (w in list(strength_df['response'])):
+    if w in list(association_df.index):
         avl_associ += 1
     else:
         out_asso_words.append(w)
 print('available:{}, all:{}'.format(avl_associ, all_words_count))
 print('Coverage:', avl_associ / all_words_count)
 for i, word in enumerate(out_asso_words, 1):
+    print('{:03} {}'.format(i, word))
+
+print('@@@ word2vec @@@')
+print('Not Available words in word2vec')
+avl_word2vec = 0
+out_word2vec_words = []
+for w in all_words:
+    if w in word_vectors:
+        avl_word2vec += 1
+    else:
+        out_word2vec_words.append(w)
+print('available:{}, all:{}'.format(avl_word2vec, all_words_count))
+print('Coverage:', avl_word2vec / all_words_count)
+for i, word in enumerate(out_word2vec_words, 1):
     print('{:03} {}'.format(i, word))
