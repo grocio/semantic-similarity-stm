@@ -1,5 +1,7 @@
 # semantic-similarity-stm
 
+This repository contains scripts for systematic review on the semantic similarity effect on short-term memory.
+
 ## Workflow
 
 ### OPTIONAL Modify Summary Table of previous studies
@@ -55,9 +57,9 @@ python table_construction.py
 ```
 
 ## Note
-In the manuscript, I used examples of words lits to explain similarity and connectivity indexes.
-I made functions that calculate (dis)similarity or connectivity indexes for a list.
-Hope that these functions facilitate psychological studies!
+In the manuscript, I used examples of words lits to explain similarity and connectivity indexes. I made functions that calculate (dis)similarity or connectivity indexes for a list. Note that you should run `free_association_matrix_creator.py` and get a cue-response matrix containing words that you target before using `connectivity_calc` function.
+
+I hope that these functions facilitate psychological studies!
 ```
 >>> from grocio_utils import *
 >>> mean_dist_from_centroid(['diamond', 'emerald', 'opal','pearl','ruby','sapphire'])
