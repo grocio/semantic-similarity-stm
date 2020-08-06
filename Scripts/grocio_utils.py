@@ -23,7 +23,8 @@ TRAINED_DATA = "word2vec-google-news-300" #word2vec model
 affect_df = pd.read_csv(AFFECT_NORMS_PATH)
 print('LOADED affect norms')
 
-
+# Loading pretrained word2vec model takes time.
+# Comment out the two lines below when you don't use word2vec data.
 word_vectors = api.load(TRAINED_DATA)
 print('LOADED word2vec vectors')
 
