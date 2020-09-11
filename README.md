@@ -1,6 +1,9 @@
 # semantic-similarity-stm
 
 This repository contains scripts for systematic review on the semantic similarity effect on short-term memory.
+The article will be publised soon.
+
+Ishiguro, S., & Saito, S. (in press) The Detrimental Effect of Semantic Similarity in Short-Term Memory Tasks: A Meta-Regression Approach. *Psychonomic Bulletin & Review*
 
 ## Workflow
 
